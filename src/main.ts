@@ -116,6 +116,6 @@ const handler = async (e: any) => {
 
 async function main() {
   logseq.Editor.registerSlashCommand( `Comment block`, handler );
-  logseq.Editor.registerBlockContextMenuItem(`Comment`, handler);
+  logseq.Editor.registerBlockContextMenuItem(`Comment block`, handler);
 }
 logseq.ready(main).catch(console.error);
