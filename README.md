@@ -31,6 +31,10 @@ If you have a long term plan, you may need to write down something about it day 
 * Trigger `Comment block` from block contextual menu.
 * Trigger `/comment` from block slash command.
 
+## CAUTION
+
+If you change the `Preferred date format` on Settings page, you will lose your connections between journal and comments.
+
 ## Inspiration and Thanks
 
 The inspiration of this plugin comes from [our community](https://discord.com/channels/725182569297215569/915076465027055656/915226549857435709) by Bailey Jennings, and likely borrowed from Roam.
