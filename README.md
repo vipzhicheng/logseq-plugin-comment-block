@@ -1,4 +1,4 @@
-# Logseq Block Comment
+# Logseq Comment Block
 
 For building an automatic comment history for Logseq! You can comment any block and show the connected history on journal page, current page, block ref sidebar and "Comments" page.
 
