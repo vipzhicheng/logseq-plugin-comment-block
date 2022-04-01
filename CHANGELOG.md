@@ -4,6 +4,7 @@
 
 - infra: build tool changed from Webpack to Vite
 - infra: add Github Action
+- feat: add shortcut support, which is bound to `mod+shift+c` #4
 
 ## v0.0.3
 

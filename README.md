@@ -24,26 +24,27 @@ Also Bailey made a demo video on Youtube
 
 ### Preparation
 
-* Click the 3 dots in the righthand corner and go to `Settings`.
-* Got to advanced and enable Developer mode.
-* Restart the app.
-* Click 3 dots and go to `Plugins`.
+- Click the 3 dots in the righthand corner and go to `Settings`.
+- Got to advanced and enable Developer mode.
+- Restart the app.
+- Click 3 dots and go to `Plugins`.
 
 ### Install plugins from Marketplace (recommended)
 
-* Click `Marketplace` button and then click `Plugins`.
-* Find the plugin and click `Install`.
+- Click `Marketplace` button and then click `Plugins`.
+- Find the plugin and click `Install`.
 
 ### Install plugins manually
 
-* Download released version assets from Github.
-* Unzip it.
-* Click `Load unpacked plugin`, and select destination directory to the unziped folder.
+- Download released version assets from Github.
+- Unzip it.
+- Click `Load unpacked plugin`, and select destination directory to the unziped folder.
 
 ## Usage
 
-* Trigger `Comment block` from block contextual menu.
-* Trigger `/Comment block` from block slash commands.
+- Trigger `Comment block` from block contextual menu.
+- Trigger `/Comment block` from block slash commands.
+- Trigger by shortcut `mod+shift+c`, mod means `command` on Mac and means `ctrl` on Windows.
 
 ## CAUTION
 
