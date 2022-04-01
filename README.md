@@ -50,6 +50,10 @@ Also Bailey made a demo video on Youtube
 
 If you change the `Preferred date format` on Settings page, you will lose your connections between journal and comments.
 
+## ❤️ Buy me a coffee
+
+If you like this plugin and you will, you can choose to buy me a coffee via [this](https://www.buymeacoffee.com/vipzhicheng) and [this](https://afdian.net/@vipzhicheng), that means a lot to me.
+
 ## Licence
 
 MIT
