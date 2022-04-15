@@ -2,13 +2,12 @@ import '@logseq/libs';
 import { BlockEntity } from '@logseq/libs/dist/LSPlugin';
 import { format } from 'date-fns';
 
-const settingsVersion = 'v1';
+const settingsVersion = 'v2';
 export const defaultSettings = {
   showToolbarIcon: true,
   keyBindings: {
-    commentBlock: 'mod+shift+c',
+    commentBlock: 'mod+shift+i',
   },
-  listStyle: 'day-first',
   settingsVersion,
   disabled: false,
 };

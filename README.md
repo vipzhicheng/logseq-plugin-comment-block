@@ -44,7 +44,7 @@ Also Bailey made a demo video on Youtube
 
 - Trigger `Comment block` from block contextual menu.
 - Trigger `/Comment block` from block slash commands.
-- Trigger by shortcut `mod+shift+c`, mod means `command` on Mac and means `ctrl` on Windows.
+- Trigger by shortcut `mod+shift+i`, mod means `command` on Mac and means `ctrl` on Windows.
 
 ## CAUTION
 

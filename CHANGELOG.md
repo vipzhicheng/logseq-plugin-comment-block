@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.5
+
+- fix: adjust short cut from `mod+shift+c` to `mod+shift+i`
+
 ## v0.0.4
 
 - infra: build tool changed from Webpack to Vite
