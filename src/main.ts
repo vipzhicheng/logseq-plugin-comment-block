@@ -179,11 +179,64 @@ const handler = async (e: any) => {
   }
 };
 
+const handleEmbed = async () => {
+  const block = await logseq.Editor.getCurrentBlock();
+  if (block) {
+    const page = await logseq.Editor.getPage(block.page.id);
+    if (page?.name) {
+      const blocks = await logseq.Editor.getPageBlocksTree(page.name);
+      let findCommentBlock = blocks.find(
+        item => item.content && item.content.startsWith('[[Comments]]')
+      );
+
+      if (findCommentBlock && findCommentBlock.children) {
+        for (let block1 of findCommentBlock.children) {
+          if (block1) {
+            // @ts-ignore
+            for (let block2 of block1.children) {
+              if (
+                (block2 as BlockEntity).content.indexOf(`((${block.uuid}))`) >
+                -1
+              ) {
+                console.log((block2 as BlockEntity).uuid);
+
+                for (let block3 of block2.children) {
+                  if (!(block3 as BlockEntity)?.properties?.id) {
+                    await logseq.Editor.upsertBlockProperty(
+                      (block3 as BlockEntity).uuid,
+                      'id',
+                      (block3 as BlockEntity).uuid
+                    );
+                  }
+
+                  await logseq.Editor.insertBlock(
+                    block.uuid,
+                    `{{embed ((${(block3 as BlockEntity).uuid}))}}`,
+                    {
+                      before: false,
+                      sibling: false,
+                    }
+                  );
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+};
+
 async function main() {
   initSettings();
   const keyBindings = getSettings('keyBindings');
   logseq.Editor.registerSlashCommand(`Comment block`, handler);
   logseq.Editor.registerBlockContextMenuItem(`Comment block`, handler);
+
+  logseq.Editor.registerSlashCommand(
+    'Embed Comment blocks To Children',
+    handleEmbed
+  );
 
   logseq.App.registerCommandPalette(
     {

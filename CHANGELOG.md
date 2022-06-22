@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.6
+
+- infra: upgrade deps.
+- fix: add comment block embed to children
+
 ## v0.0.5
 
 - fix: adjust short cut from `mod+shift+c` to `mod+shift+i`
