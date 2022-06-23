@@ -3,7 +3,8 @@
 ## v0.0.6
 
 - infra: upgrade deps.
-- fix: add comment block embed to children
+- feat: add comment block embed to children
+- fix: comment block can not trigger from parallel panel
 
 ## v0.0.5
 
