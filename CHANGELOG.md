@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.7
+
+- fix: lock file
+
 ## v0.0.6
 
 - infra: upgrade deps.
