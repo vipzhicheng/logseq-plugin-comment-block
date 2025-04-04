@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.8
+
+- infra: upgrade deps.
+- feat: add settings "putBlockRefAsChild"
+
 ## v0.0.7
 
 - fix: lock file

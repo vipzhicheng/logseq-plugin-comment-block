@@ -46,6 +46,10 @@ Also Bailey made a demo video on Youtube
 - Trigger `/Comment block` from block slash commands.
 - Trigger by shortcut `mod+shift+i`, mod means `command` on Mac and means `ctrl` on Windows.
 
+## Settings
+
+- `putBlockRefAsChild': That means everytime you trigger a comment, it will insert a new block and add commented block ref as child. If you disable this, it will insert a new block as the child of commented block ref. Use this with CAUTION, because the embed feature will not work and it can not reuse the block ref if you trigger comment again.
+
 ## CAUTION
 
 If you change the `Preferred date format` on Settings page, you will lose your connections between journal and comments.

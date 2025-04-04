@@ -1,12 +1,12 @@
-import '@logseq/libs';
-import { BlockEntity, SettingSchemaDesc } from '@logseq/libs/dist/LSPlugin';
-import { format } from 'date-fns';
+import "@logseq/libs";
+import { BlockEntity, SettingSchemaDesc } from "@logseq/libs/dist/LSPlugin";
+import { format } from "date-fns";
 
-const settingsVersion = 'v2';
+const settingsVersion = "v2";
 const defaultSettings = {
   showToolbarIcon: true,
   keyBindings: {
-    commentBlock: 'mod+shift+i',
+    commentBlock: "mod+shift+i",
   },
   settingsVersion,
   disabled: false,
@@ -35,6 +35,18 @@ const getSettings = (
   return key ? (merged[key] ? merged[key] : defaultValue) : merged;
 };
 
+const defineSettings = (): SettingSchemaDesc[] => [
+  {
+    key: "putBlockRefAsChild",
+    type: "boolean",
+    title: "Put block ref as child",
+    description:
+      "That means everytime you trigger a comment, it will insert a new block and add commented block ref as child. If you disable this, it will insert a new block as the child of commented block ref. Use this with CAUTION, because the embed feature will not work and it can not reuse the block ref if you trigger comment again.",
+    default: false,
+  },
+];
+logseq.useSettingsSchema(defineSettings());
+
 async function getLastBlock(pageName: string): Promise<null | BlockEntity> {
   const blocks = await logseq.Editor.getPageBlocksTree(pageName);
   if (blocks.length === 0) {
@@ -55,14 +67,14 @@ const handler = async (e: any) => {
   }
   const config = await logseq.App.getUserConfigs();
   if (!block?.properties?.id) {
-    await logseq.Editor.upsertBlockProperty(e.uuid, 'id', e.uuid);
+    await logseq.Editor.upsertBlockProperty(e.uuid, "id", e.uuid);
   }
 
   const page = await logseq.Editor.getPage(block.page.id);
   if (page?.name) {
     const blocks = await logseq.Editor.getPageBlocksTree(page.name);
     let findCommentBlock = blocks.find(
-      item => item.content && item.content.startsWith('[[Comments]]')
+      (item) => item.content && item.content.startsWith("[[Comments]]")
     );
 
     const lastBlock = await getLastBlock(page.name);
@@ -70,7 +82,7 @@ const handler = async (e: any) => {
     if (!findCommentBlock && lastBlock?.uuid) {
       const newCommentBlock = await logseq.Editor.insertBlock(
         lastBlock.uuid,
-        '[[Comments]]',
+        "[[Comments]]",
         {
           sibling: true,
           before: false,
@@ -123,16 +135,46 @@ const handler = async (e: any) => {
       }
 
       if (todayBlock?.uuid) {
-        // Reuse block ref block
-        let blockRefBlock, findBlockRefBlock;
-
-        if (todayBlock.children && todayBlock.children.length > 0) {
-          findBlockRefBlock = todayBlock.children.find(
-            (item: any) =>
-              item.content && item.content.startsWith(`((${e.uuid}))`)
+        // process putBlockRefAsChild
+        if (logseq.settings?.putBlockRefAsChild) {
+          let commentBlock = await logseq.Editor.insertBlock(
+            todayBlock?.uuid,
+            ``,
+            {
+              sibling: false,
+            }
           );
-          if (findBlockRefBlock?.uuid) {
-            blockRefBlock = findBlockRefBlock;
+          if (commentBlock?.uuid) {
+            await logseq.Editor.openInRightSidebar(commentBlock?.uuid);
+            await logseq.Editor.insertBlock(
+              commentBlock?.uuid,
+              `((${e.uuid}))`,
+              {
+                sibling: false,
+              }
+            );
+            await logseq.Editor.editBlock(commentBlock?.uuid);
+          }
+        } else {
+          // Reuse block ref block
+          let blockRefBlock, findBlockRefBlock;
+
+          if (todayBlock.children && todayBlock.children.length > 0) {
+            findBlockRefBlock = todayBlock.children.find(
+              (item: any) =>
+                item.content && item.content.startsWith(`((${e.uuid}))`)
+            );
+            if (findBlockRefBlock?.uuid) {
+              blockRefBlock = findBlockRefBlock;
+            } else {
+              blockRefBlock = await logseq.Editor.insertBlock(
+                todayBlock?.uuid,
+                `((${e.uuid}))`,
+                {
+                  sibling: false,
+                }
+              );
+            }
           } else {
             blockRefBlock = await logseq.Editor.insertBlock(
               todayBlock?.uuid,
@@ -142,41 +184,33 @@ const handler = async (e: any) => {
               }
             );
           }
-        } else {
-          blockRefBlock = await logseq.Editor.insertBlock(
-            todayBlock?.uuid,
-            `((${e.uuid}))`,
-            {
-              sibling: false,
-            }
-          );
-        }
 
-        if (blockRefBlock?.uuid) {
-          await logseq.Editor.openInRightSidebar(blockRefBlock?.uuid);
+          if (blockRefBlock?.uuid) {
+            await logseq.Editor.openInRightSidebar(blockRefBlock?.uuid);
 
-          // Reuse the empty block
-          let emptyBlock;
-          if (blockRefBlock.children && blockRefBlock.children.length > 0) {
-            const lastEditingBlock =
-              blockRefBlock.children[blockRefBlock.children.length - 1];
-            if (lastEditingBlock?.content.length === 0) {
-              emptyBlock = lastEditingBlock;
-            }
-          }
-
-          if (!emptyBlock) {
-            emptyBlock = await logseq.Editor.insertBlock(
-              blockRefBlock?.uuid,
-              '',
-              {
-                sibling: false,
+            // Reuse the empty block
+            let emptyBlock;
+            if (blockRefBlock.children && blockRefBlock.children.length > 0) {
+              const lastEditingBlock =
+                blockRefBlock.children[blockRefBlock.children.length - 1];
+              if (lastEditingBlock?.content.length === 0) {
+                emptyBlock = lastEditingBlock;
               }
-            );
-          }
+            }
 
-          if (emptyBlock?.uuid) {
-            await logseq.Editor.editBlock(emptyBlock?.uuid);
+            if (!emptyBlock) {
+              emptyBlock = await logseq.Editor.insertBlock(
+                blockRefBlock?.uuid,
+                "",
+                {
+                  sibling: false,
+                }
+              );
+            }
+
+            if (emptyBlock?.uuid) {
+              await logseq.Editor.editBlock(emptyBlock?.uuid);
+            }
           }
         }
       }
@@ -198,7 +232,7 @@ const handleEmbed = async (e: any) => {
   if (page?.name) {
     const blocks = await logseq.Editor.getPageBlocksTree(page.name);
     let findCommentBlock = blocks.find(
-      item => item.content && item.content.startsWith('[[Comments]]')
+      (item) => item.content && item.content.startsWith("[[Comments]]")
     );
 
     if (findCommentBlock && findCommentBlock.children) {
@@ -213,7 +247,7 @@ const handleEmbed = async (e: any) => {
                 if (!(block3 as BlockEntity)?.properties?.id) {
                   await logseq.Editor.upsertBlockProperty(
                     (block3 as BlockEntity).uuid,
-                    'id',
+                    "id",
                     (block3 as BlockEntity).uuid
                   );
                 }
@@ -239,7 +273,7 @@ const handleEmbed = async (e: any) => {
 
 async function main() {
   initSettings();
-  const keyBindings = getSettings('keyBindings');
+  const keyBindings = getSettings("keyBindings");
   logseq.Editor.registerSlashCommand(`Comment block`, handler);
   logseq.Editor.registerBlockContextMenuItem(`Comment block`, handler);
   logseq.App.registerCommandPalette(
@@ -247,7 +281,7 @@ async function main() {
       key: `comment-block`,
       label: `Comment block`,
       keybinding: {
-        mode: 'global',
+        mode: "global",
         binding: keyBindings.commentBlock,
       },
     },
@@ -255,7 +289,7 @@ async function main() {
   );
 
   logseq.Editor.registerSlashCommand(
-    'Embed Comment blocks To Children',
+    "Embed Comment blocks To Children",
     handleEmbed
   );
   logseq.Editor.registerBlockContextMenuItem(
