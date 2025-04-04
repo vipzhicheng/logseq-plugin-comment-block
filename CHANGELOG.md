@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.9
+
+- infra: update github action config
+
 ## v0.0.8
 
 - infra: upgrade deps.
