@@ -153,6 +153,8 @@ const handler = async (e: any) => {
                 sibling: false,
               }
             );
+            // Wait for sidebar to finish rendering before focusing
+            await new Promise((resolve) => setTimeout(resolve, 300));
             await logseq.Editor.editBlock(commentBlock?.uuid);
           }
         } else {
@@ -209,6 +211,8 @@ const handler = async (e: any) => {
             }
 
             if (emptyBlock?.uuid) {
+              // Wait for sidebar to finish rendering before focusing
+              await new Promise((resolve) => setTimeout(resolve, 300));
               await logseq.Editor.editBlock(emptyBlock?.uuid);
             }
           }
