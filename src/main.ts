@@ -67,7 +67,7 @@ const handler = async (e: any) => {
   }
   const config = await logseq.App.getUserConfigs();
   if (!block?.properties?.id) {
-    await logseq.Editor.upsertBlockProperty(e.uuid, "id", e.uuid);
+    await logseq.Editor.upsertBlockProperty(block.uuid, "id", block.uuid);
   }
 
   const page = await logseq.Editor.getPage(block.page.id);
@@ -148,7 +148,7 @@ const handler = async (e: any) => {
             await logseq.Editor.openInRightSidebar(commentBlock?.uuid);
             await logseq.Editor.insertBlock(
               commentBlock?.uuid,
-              `((${e.uuid}))`,
+              `((${block.uuid}))`,
               {
                 sibling: false,
               }
@@ -162,14 +162,14 @@ const handler = async (e: any) => {
           if (todayBlock.children && todayBlock.children.length > 0) {
             findBlockRefBlock = todayBlock.children.find(
               (item: any) =>
-                item.content && item.content.startsWith(`((${e.uuid}))`)
+                item.content && item.content.startsWith(`((${block.uuid}))`)
             );
             if (findBlockRefBlock?.uuid) {
               blockRefBlock = findBlockRefBlock;
             } else {
               blockRefBlock = await logseq.Editor.insertBlock(
                 todayBlock?.uuid,
-                `((${e.uuid}))`,
+                `((${block.uuid}))`,
                 {
                   sibling: false,
                 }
@@ -178,7 +178,7 @@ const handler = async (e: any) => {
           } else {
             blockRefBlock = await logseq.Editor.insertBlock(
               todayBlock?.uuid,
-              `((${e.uuid}))`,
+              `((${block.uuid}))`,
               {
                 sibling: false,
               }
